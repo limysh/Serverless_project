@@ -3,7 +3,20 @@ import GoogleButton  from 'react-google-button';
 import { UserAuth } from '../context/AuthContext';
 import {Link, useNavigate} from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
-
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Login = () => {
     const { googleSignIn, facebookSignIn, user } = UserAuth();
     const navigate = useNavigate();
@@ -11,16 +24,18 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { signIn } = UserAuth();
+    const notify = () => toast("Something went wrong!");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('')
         try {
             await signIn(email, password)
-            navigate('/startGame')
+            navigate('/dashboard')
         } catch (e) {
             setError(e.message)
             console.log(e.message)
+            notify();
         }
     };
     const handleGoogleSignIn = async () => {
@@ -28,6 +43,7 @@ const Login = () => {
             await googleSignIn();
         } catch (error) {
             console.log(error);
+            notify();
         }
     };
 
@@ -36,45 +52,99 @@ const Login = () => {
             await facebookSignIn();
         } catch (error) {
             console.log(error);
+            notify();
         }
     };
 
     useEffect(() => {
         if (user != null) {
-            navigate('/startGame');
+            navigate('/dashboard');
         }
     }, [user]);
 
+    function Copyright(props) {
+        return (
+            <Typography variant="body2" color="text.secondary" align="center" {...props}>
+                {'Copyright © '}
+                <Link color="inherit" href="#">
+                    Trivia Titans
+                </Link>{' '}
+                {new Date().getFullYear()}
+                {'.'}
+            </Typography>
+        );
+    }
+
+    const defaultTheme = createTheme();
+
     return (
         <div>
-            <div className='max-w-[700px] mx-auto my-16 p-4'>
-                <div>
-                    <h1 className='text-2xl font-bold py-2'>Sign in to your account</h1>
-                    <p className='py-2'>
-                        Don't have an account yet?{' '}
-                        <Link to='/' className='underline'>
-                            Sign up.
-                        </Link>
-                    </p>
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <div className='flex flex-col py-2'>
-                        <label className='py-2 font-medium'>Email Address</label>
-                        <input onChange={(e) => setEmail(e.target.value)} className='border p-3' type='email' />
-                    </div>
-                    <div className='flex flex-col py-2'>
-                        <label className='py-2 font-medium'>Password</label>
-                        <input onChange={(e) => setPassword(e.target.value)} className='border p-3' type='password' />
-                    </div>
-                    <button className='border border-blue-500 bg-blue-600 hover:bg-blue-500 w-full p-4 my-2 text-white'>
-                        Sign In
-                    </button>
-                </form>
-            </div>
-            <div className='max-w-[240px] m-auto py-4'>
-                <GoogleButton onClick={handleGoogleSignIn} />
-                {/*<FacebookLogin onClick={handleFacebookSignIn} />*/}
-            </div>
+            <ThemeProvider theme={defaultTheme}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign in
+                        </Typography>
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                autoFocus
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Sign In
+                            </Button>
+                            <Grid container>
+                                {/*<Grid item xs>
+                                    <Link href="#" variant="body2">
+                                        Forgot password?
+                                    </Link>
+                                </Grid>*/}
+                                <Grid item>
+                                    <Link to="/" variant="body2">
+                                        {"Don't have an account? Sign Up"}
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Copyright sx={{ mt: 2, mb: 4 }} />
+                </Container>
+                <ToastContainer />
+            </ThemeProvider>
         </div>
     );
 };

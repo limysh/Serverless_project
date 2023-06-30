@@ -4,7 +4,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import {AuthContextProvider} from "./context/AuthContext";
-import Game from "./pages/game";
+import Dashboard from "./pages/dashboard";
 
 function App() {
   return <div>
@@ -13,7 +13,7 @@ function App() {
         <Route element={<Home />} path="/" />
         <Route element={<Login />} path="/login" />
         <Route element={<Logout />} path="/logout" />
-        <Route element={<Game />} path="/startGame" />
+        <Route element={<Dashboard />} path="/dashboard" />
       </Routes>
     </AuthContextProvider>
   </div>;
