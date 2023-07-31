@@ -101,7 +101,7 @@ const GameLobby = () => {
     applyFilters();
   }, [gameLobbies, categoryFilter, difficultyFilter, timeFrameFilter]);
 
-  const handleJoinGame = async (gameId) => {
+  const handleJoinGame = async (gameLobbyId, gameId) => {
     try {
       // Get the "userId" from localStorage
       const userId = localStorage.getItem("userId");
@@ -129,7 +129,7 @@ const GameLobby = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              gameLobbyId: gameId,
+              gameLobbyId: gameLobbyId,
               userId: userId,
             }),
           }
@@ -219,7 +219,7 @@ const GameLobby = () => {
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id)}
+                    onClick={() => handleJoinGame(lobby.id,lobby.gameId)}
                   >
                     Start Game
                   </Button>
@@ -228,7 +228,7 @@ const GameLobby = () => {
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id)}
+                    onClick={() => handleJoinGame(lobby.id,lobby.gameId)}
                   >
                     Join Lobby
                   </Button>
