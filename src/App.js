@@ -14,6 +14,8 @@ import DeleteQuestionPage from "./pages/deleteQuestion";
 import CreateGamePage from "./pages/createGame";
 import ManageGamePage from "./pages/manageGame";
 import ManageGameDetailsPage from "./pages/manageGameDetails";
+import AuthQuestions from "./pages/authquestions";
+import AskQuestion from "./pages/askquestion";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route element={<Login />} path="/login" />
           <Route element={<Logout />} path="/logout" />
           <Route element={<Dashboard />} path="/dashboard" />
+          <Route element={<AuthQuestions />} path="/authQuestions" />
+          <Route element={<AskQuestion />} path="/askQuestion" />
           <Route path="/game-lobby" element={<GameLobby />} />
           <Route element={<TriviaContentManagementPage />} path="/admin" />
           <Route element={<AddQuestionForm />} path="/add-question" />
