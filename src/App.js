@@ -16,6 +16,7 @@ import ManageGamePage from "./pages/manageGame";
 import ManageGameDetailsPage from "./pages/manageGameDetails";
 import AuthQuestions from "./pages/authquestions";
 import AskQuestion from "./pages/askquestion";
+import QuizGame from "./pages/quizGame";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           />
 
           <Route element={<Home />} path="/" />
+          <Route element={<QuizGame />} path="/game-experience" />
         </Routes>
       </AuthContextProvider>
     </div>
