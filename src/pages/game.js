@@ -101,8 +101,43 @@ const GameLobby = () => {
     applyFilters();
   }, [gameLobbies, categoryFilter, difficultyFilter, timeFrameFilter]);
 
-  const handleJoinGame = (gameId) => {
-    navigate(`/game/${gameId}`);
+  const handleJoinGame = async (gameId) => {
+    try {
+      // Get the "userId" from localStorage
+      const userId = localStorage.getItem("userId");
+
+      // Check if the user is already in a game lobby
+      const userInLobby = gameLobbies.some((lobby) =>
+        lobby.players.some((team) => team.id === userId)
+      );
+
+      if (userInLobby) {
+        navigate("/game-experience");
+      } else {
+        const response = await fetch(
+          "https://us-central1-csci5410-b00934899.cloudfunctions.net/addUserToLobby",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              gameLobbyId: gameId,
+              userId: userId,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        console.log(data.message); // This will print the response message in the console.
+
+        // Handle any other actions after successfully joining the game lobby, if needed.
+        // For example, you might want to refresh the game lobby data after joining.
+        // fetchGameLobbies();
+      }
+    } catch (error) {
+      console.error("Error joining game lobby:", error);
+    }
   };
 
   const resetFilter = () => {
@@ -134,33 +169,61 @@ const GameLobby = () => {
         {(loading ? gameLobbies : filteredLobbies).map((lobby) => (
           <Grid item xs={12} sm={6} md={4} key={lobby.id}>
             <Card className={classes.card}>
-              <CardContent>
+              <CardContent
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
                 <Typography variant="h5" align="center">
-                  {lobby.name}
+                  {lobby.name + " Lobby"}
                 </Typography>
-                <Typography align="center">
-                  Category: {lobby.category}
-                </Typography>
+                <Typography align="center">Category: {lobby.category}</Typography>
                 <Typography align="center">
                   Difficulty: {lobby.difficulty}
                 </Typography>
                 <Typography align="center">
-                  Time Frame: {lobby.timeFrame}
+                  Time Frame: {lobby.timeFrame + " Seconds"}
                 </Typography>
-                <Typography align="center">Teams:</Typography>
+                <Typography variant="body2" align="center">
+                  Players:
+                </Typography>
                 <ul>
                   {lobby.players.map((team) =>
-                    team.name ? <li key={team.id}>{team.name}</li> : null
+                    team.id !== null && team.name !== null ? (
+                      <li
+                        key={team.id}
+                        style={{
+                          fontSize: "0.9rem", // Adjust the font size as needed
+                          whiteSpace: "pre-line", // Allow line breaks
+                        }}
+                      >
+                        {team.id} - {team.name}
+                        <br />
+                      </li>
+                    ) : null
                   )}
                 </ul>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button}
-                  onClick={() => handleJoinGame(lobby.id)}
-                >
-                  Join Lobby
-                </Button>
+                {lobby.players.some((team) => team.id === localStorage.getItem("userId")) ? (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() => navigate("/game-experience")}
+                  >
+                    Start Game
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() => handleJoinGame(lobby.id)}
+                  >
+                    Join Lobby
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </Grid>
