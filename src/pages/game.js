@@ -110,11 +110,12 @@ const GameLobby = () => {
       const userInLobby = gameLobbies.some((lobby) =>
         lobby.players.some((team) => team.id === userId)
       );
-      let data = 
+      let data1 =
       {
         userId: localStorage.getItem("userId"),
         game_Id: gameId
       }
+      const data = { message: data1 };
       console.log(data,"out if");
       if (userInLobby) {
         console.log(data,"in if");
