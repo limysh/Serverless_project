@@ -14,12 +14,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import GoogleButton from "react-google-button";
-import FacebookLogin from 'react-facebook-login';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SocialIcon } from 'react-social-icons';
 
 const Home = () => {
     const { googleSignIn, facebookSignIn, user } = UserAuth();
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('')
@@ -33,9 +35,9 @@ const Home = () => {
         setError('');
         console.log(email,password,"e>>>>> before user created")
         try {
-            await createUser(email, password);
+            await createUser(email, password, firstName);
             console.log(e,"e>>>>> after user created")
-            navigate('/login')
+            navigate('/authQuestions')
         } catch (e) {
             setError(e.message);
             console.log(e.message);
@@ -107,6 +109,7 @@ const Home = () => {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    onChange={(e) => setFirstName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -116,7 +119,9 @@ const Home = () => {
                                     id="lastName"
                                     label="Last Name"
                                     name="lastName"
+                                    required
                                     autoComplete="family-name"
+                                    onChange={(e) => setLastName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -127,6 +132,7 @@ const Home = () => {
                                     label="Email Address"
                                     name="email"
                                     type='email'
+                                    required
                                     autoComplete="email"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -139,6 +145,7 @@ const Home = () => {
                                     label="Password"
                                     type="password"
                                     id="password"
+                                    required
                                     autoComplete="new-password"
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
@@ -152,15 +159,12 @@ const Home = () => {
                         >
                             Sign Up
                         </Button>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <GoogleButton style={{maxWidth: "205px"}} onClick={handleGoogleSignIn} />
-                            </Grid>
-                            <Grid item xs={12} sm={6} s>
-                                {/*<FacebookLogin onClick={handleFacebookSignIn} />*/}
-                            </Grid>
+                        <Grid container justifyContent="center" >
+                            {/*<GoogleButton style={{maxWidth: "205px"}} onClick={handleGoogleSignIn} />*/}
+                            <SocialIcon style={{marginRight: "5px"}} network="google" onClick={handleGoogleSignIn}/>
+                            <SocialIcon  network="facebook" onClick={handleFacebookSignIn}/>
                         </Grid>
-                        <Grid container justifyContent="center" sx={{ mt: 3, mb: 2 }}>
+                        <Grid container  justifyContent="center" sx={{ mt: 3, mb: 2 }}>
                             <Grid item>
                                 <Link to='/login' variant="body2" >
                                     Already have an account? Sign in

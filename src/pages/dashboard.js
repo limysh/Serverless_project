@@ -1,26 +1,26 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {UserAuth} from "../context/AuthContext";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
-import Link from '@mui/material/Link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Button from '@mui/material/Button';
 
 const Dashboard = () => {
     const { logOut, user } = UserAuth();
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
 
     const handleLogOut = async () => {
         try{
+            localStorage.clear();
             await logOut()
         }catch (err){
             console.log(err)
@@ -50,12 +50,23 @@ const Dashboard = () => {
 
     const defaultTheme = createTheme();
 
+    useEffect(() => {
+        if(user == null || user == {} || user == undefined ){
+            navigate('/');
+        }
+        const uid = user?.uid;
+        fetch(`https://us-central1-serverless-sdp19.cloudfunctions.net/get_user_by_id?uid=${uid}`)
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('currentLoggedInUser',JSON.stringify(data));
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+        console.log(user,"DASHBOARD")
+    },[]);
+
     return <div>
-       {/* <h1>You Are Logged In, start playing the game!!</h1>
-        {console.log(user,"user>>>>>>>")}
-        <p>Welcome <b>{user?.displayName ? user.displayName : user?.uid}</b>, you have used <b>{user.email}</b> to create an account.</p>
-        <p>Check console for all other details...</p>
-        <button onClick={handleLogOut}>Logout</button>*/}
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
@@ -75,7 +86,6 @@ const Dashboard = () => {
                             Dashboard
                         </Typography>
                         <IconButton color="inherit" >
-
                             <Badge color="secondary">
                                 <AccountCircleIcon sx={{ mr: 2}} />
                             </Badge>
