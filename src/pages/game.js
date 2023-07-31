@@ -110,9 +110,15 @@ const GameLobby = () => {
       const userInLobby = gameLobbies.some((lobby) =>
         lobby.players.some((team) => team.id === userId)
       );
-
+      let data = 
+      {
+        userId: localStorage.getItem("userId"),
+        game_Id: gameId
+      }
+      console.log(data,"out if");
       if (userInLobby) {
-        navigate("/game-experience");
+        console.log(data,"in if");
+        navigate("/game-experience",{state : data});
       } else {
         const response = await fetch(
           "https://us-central1-csci5410-b00934899.cloudfunctions.net/addUserToLobby",
@@ -126,6 +132,8 @@ const GameLobby = () => {
               userId: userId,
             }),
           }
+
+          
         );
 
         const data = await response.json();
@@ -210,7 +218,7 @@ const GameLobby = () => {
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => navigate("/game-experience")}
+                    onClick={() => handleJoinGame(lobby.id)}
                   >
                     Start Game
                   </Button>
