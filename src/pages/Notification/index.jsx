@@ -13,7 +13,11 @@ const NotificationPage = () => {
   const fetchNotifications = async () => {
     try {
       const apiEndpoint = "https://hzyp7ajuq6m65xw5vcai6qxis40jyngr.lambda-url.us-east-1.on.aws/";
-      const id = "TeamB";
+      const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
+      console.log(user_data);
+      const user_id = user_data["uid"];
+      console.log(user_id);
+      const id = "TeamD";
       
       const response = await axios.post(apiEndpoint, { id });
 

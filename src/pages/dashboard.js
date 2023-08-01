@@ -19,6 +19,11 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
 
+
+    const getNotifications = () => {
+        navigate('/notification');
+    } 
+
     const handleLogOut = async () => {
         try{
             localStorage.clear();
@@ -99,7 +104,7 @@ const Dashboard = () => {
                                 <AccountCircleIcon sx={{ mr: 2}} />
                             </Badge>
                             <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
+                                <NotificationsIcon onClick={getNotifications} />
                             </Badge>
                         </IconButton>
                         <Button sx={{ ml: 2}} variant="contained" onClick={handleLogOut}>Logout</Button>

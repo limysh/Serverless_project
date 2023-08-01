@@ -17,7 +17,7 @@ def lambda_handler(event, context):
         response = {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
             }
@@ -27,7 +27,11 @@ def lambda_handler(event, context):
     entity_type = body.get('entity_type', None)
     entity_name = body.get('name', None)
     category = body.get('category', None)
+    game_id = body.get('game_id', None)
     time_frame = body.get('time_frame', None)
+    
+    if game_id is not None and entity_type is None:
+        return get_game_stats(Attr('game_id').eq(game_id))
     
     # Set the filter expression for the query
     filter_expression = Attr('entity_type').eq(entity_type)
@@ -35,6 +39,8 @@ def lambda_handler(event, context):
     create_date = None
 
     if category is not None:
+        print("category")
+        print(category)
         # Set the filter expression for the query
         filter_expression = filter_expression & Attr('category').eq(category)
 
@@ -63,7 +69,7 @@ def get_leaderboard(filter_expression):
     # Query the leaderboard data from DynamoDB
     response = table.scan(
         FilterExpression=filter_expression,
-        ProjectionExpression='entity_name, score, right_answers, wrong_answers',
+        ProjectionExpression='entity_name, score, right_answers, wrong_answers, game_id',
         Select='SPECIFIC_ATTRIBUTES'
     )
     
@@ -103,12 +109,15 @@ def get_leaderboard(filter_expression):
         'statusCode': 200,
         'body': json.dumps(leaderboard_data, default=str),
         'headers': {
-            'Access-Control-Allow-Origin': '*', 
+            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
     }
     
+    print("response")
+    print(response)
+
     return response
 
 
@@ -116,7 +125,7 @@ def get_entity_stats(filter_expression):
     # Query the leaderboard data from DynamoDB
     response = table.scan(
         FilterExpression=filter_expression,
-        ProjectionExpression='entity_name, score, right_answers, wrong_answers, category, entity_type, create_time',
+        ProjectionExpression='entity_name, score, right_answers, wrong_answers, category, entity_type, create_time, game_id',
         Select='SPECIFIC_ATTRIBUTES'
     )
 
@@ -127,7 +136,30 @@ def get_entity_stats(filter_expression):
         'statusCode': 200,
         'body': json.dumps(entity_data, default=str),
         'headers': {
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        }
+    }
+
+    return response
+    
+def get_game_stats(filter_expression):
+    # Query the leaderboard data from DynamoDB
+    response = table.scan(
+        FilterExpression=filter_expression,
+        ProjectionExpression='entity_name, score, right_answers, wrong_answers, category, entity_type, create_time, game_id',
+        Select='SPECIFIC_ATTRIBUTES'
+    )
+
+    # Get the data for the specified entity
+    entity_data = response['Items']
+
+    response = {
+        'statusCode': 200,
+        'body': json.dumps(entity_data, default=str),
+        'headers': {
+            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
