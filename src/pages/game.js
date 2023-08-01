@@ -143,6 +143,7 @@ const GameLobby = () => {
         // Handle any other actions after successfully joining the game lobby, if needed.
         // For example, you might want to refresh the game lobby data after joining.
         // fetchGameLobbies();
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error joining game lobby:", error);
@@ -208,7 +209,7 @@ const GameLobby = () => {
                           whiteSpace: "pre-line", // Allow line breaks
                         }}
                       >
-                        {team.id} - {team.name}
+                        {team.playerName} - {team.name}
                         <br />
                       </li>
                     ) : null

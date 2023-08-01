@@ -12,7 +12,8 @@ import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Button from '@mui/material/Button';
-
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 const Dashboard = () => {
     const { logOut, user } = UserAuth();
     const navigate = useNavigate();
@@ -71,7 +72,15 @@ const Dashboard = () => {
         console.log(user,"DASHBOARD")
     },[]);
 
-    return <div>
+    function handleTeamClick() {
+        navigate("/createTeam")
+    }
+
+    function handleLobbyClick() {
+        navigate("/game-lobby")
+    }
+
+    return <>
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
@@ -104,7 +113,16 @@ const Dashboard = () => {
 
             </Box>
         </ThemeProvider>
-    </div>;
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 30 }}>
+            <Button variant="contained" style={{marginRight : "10px"}} onClick={handleTeamClick}>
+                Create Team
+            </Button>
+            <Button variant="contained" onClick={handleLobbyClick}>
+                Join Game Lobby
+            </Button>
+        </Box>
+
+    </>;
 };
 
 export default Dashboard;
