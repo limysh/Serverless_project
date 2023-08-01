@@ -13,11 +13,21 @@ table = dynamodb.Table(TABLE_NAME)
 
 
 def lambda_handler(event, context):
-    category = event['queryStringParameters'].get('category', None)
-    time_frame = event['queryStringParameters'].get('time_frame', None)
-
-    entity_type = event['pathParameters'].get('entityType', None)
-    entity_name = event['pathParameters'].get('name', None)
+    if event.get('requestContext', {}).get('http', {}).get('method') == 'OPTIONS':
+        response = {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            }
+        }
+        return response
+    body = json.loads(event['body'])
+    entity_type = body.get('entity_type', None)
+    entity_name = body.get('name', None)
+    category = body.get('category', None)
+    time_frame = body.get('time_frame', None)
     
     # Set the filter expression for the query
     filter_expression = Attr('entity_type').eq(entity_type)
@@ -80,7 +90,7 @@ def get_leaderboard(filter_expression):
     # Calculate the efficiency for each entity
     for entity_name in entity_data:
         entity = entity_data[entity_name]
-        entity['efficiency'] = entity['total_right_answers'] / entity['total_games'] if entity['total_games'] > 0 else 0
+        entity['efficiency'] = int(entity['total_right_answers'] * 100 / (entity['total_right_answers'] + entity['total_wrong_answers'])) if entity['total_games'] > 0 else 0
 
     # Sort the leaderboard data by total score in descending order
     leaderboard_data = sorted(entity_data.values(), key=lambda x: x['total_score'], reverse=True)
@@ -91,9 +101,14 @@ def get_leaderboard(filter_expression):
 
     response = {
         'statusCode': 200,
-        'body': json.dumps(leaderboard_data, default=str)
+        'body': json.dumps(leaderboard_data, default=str),
+        'headers': {
+            'Access-Control-Allow-Origin': '*', 
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        }
     }
-
+    
     return response
 
 
@@ -110,7 +125,12 @@ def get_entity_stats(filter_expression):
 
     response = {
         'statusCode': 200,
-        'body': json.dumps(entity_data, default=str)
+        'body': json.dumps(entity_data, default=str),
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        }
     }
 
     return response
