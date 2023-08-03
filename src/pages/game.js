@@ -113,7 +113,9 @@ const GameLobby = () => {
       let data1 =
       {
         userId: localStorage.getItem("userId"),
-        game_Id: gameId
+        game_Id: gameId,
+        team_id: localStorage.getItem("teamId")
+        
       }
       const data = { message: data1 };
       console.log(data,"out if");
@@ -132,12 +134,11 @@ const GameLobby = () => {
               gameLobbyId: gameLobbyId,
               userId: userId,
             }),
-          }
-
-          
+          } 
         );
 
         const data = await response.json();
+        localstorage.setItem("teamId",data.teamId);
         console.log(data.message); // This will print the response message in the console.
 
         // Handle any other actions after successfully joining the game lobby, if needed.
@@ -229,7 +230,7 @@ const GameLobby = () => {
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id,lobby.gameId)}
+                    onClick={() => handleJoinGame(lobby.id,lobby.gameId,)}
                   >
                     Join Lobby
                   </Button>
