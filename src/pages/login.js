@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import GoogleButton  from 'react-google-button';
 import { UserAuth } from '../context/AuthContext';
 import {Link, useNavigate} from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -31,6 +28,7 @@ const Login = () => {
     setError('')
     try {
       await signIn(email, password)
+      //to redirect on MFA page
       navigate('/askQuestion')
     } catch (e) {
       setError(e.message)
@@ -40,6 +38,7 @@ const Login = () => {
   };
   const handleGoogleSignIn = async () => {
     try {
+      // to call google login from auth context
       await googleSignIn();
     } catch (error) {
       console.log(error);
@@ -49,18 +48,13 @@ const Login = () => {
 
   const handleFacebookSignIn = async () => {
     try {
+      // to call facebook login from auth context
       await facebookSignIn();
     } catch (error) {
       console.log(error);
       notify();
     }
   };
-
-  /*    useEffect(() => {
-          if (user != null) {
-              navigate('/dashboard');
-          }
-      }, [user]);*/
 
   function Copyright(props) {
     return (
@@ -128,19 +122,17 @@ const Login = () => {
                   Sign In
                 </Button>
                 <Grid container justifyContent="center" >
-                  {/*<GoogleButton style={{maxWidth: "205px"}} onClick={handleGoogleSignIn} />*/}
                   <SocialIcon style={{marginRight: "5px"}} network="google" onClick={handleGoogleSignIn}/>
                   <SocialIcon  network="facebook" onClick={handleFacebookSignIn}/>
                 </Grid>
                 <Grid container justifyContent="center" sx={{ mt: 3, mb: 2 }}>
-                  {/*<Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>*/}
                   <Grid item>
                     <Link to="/" variant="body2">
                       {"Don't have an account? Sign Up"}
+                    </Link>
+                    <br/>
+                    <Link to="/reset-password" style={{marginLeft: "50px"}} variant="body2">
+                      {"Forget Password?"}
                     </Link>
                   </Grid>
                 </Grid>

@@ -19,6 +19,8 @@ import AskQuestion from "./pages/askquestion";
 import QuizGame from "./pages/quizGame";
 import LeaderboardPage from "./pages/Leaderboard";
 import NotificationPage from "./pages/Notification";
+import ForgotPassword from "./pages/resetpassword";
+import UserProfile from "./profile";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route element={<Dashboard />} path="/dashboard" />
           <Route element={<AuthQuestions />} path="/authQuestions" />
           <Route element={<AskQuestion />} path="/askQuestion" />
+          <Route element={<ForgotPassword />} path="/reset-password" />
+          <Route element={<UserProfile />} path="/profile" />
           <Route path="/game-lobby" element={<GameLobby />} />
           <Route element={<TriviaContentManagementPage />} path="/admin" />
           <Route element={<AddQuestionForm />} path="/add-question" />
