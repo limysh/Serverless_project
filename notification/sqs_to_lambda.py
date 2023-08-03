@@ -45,6 +45,7 @@ def lambda_handler(event, context):
             for message in messages:
                 print(message)
                 message_body = json.loads(message['Body'])
+                message_body['message'] += f" [{message_body['timestamp']}]"
                 if message_body['id'] == id:
                     matching_notifications.append(message_body['message'])
                     delete_message_from_queue(queue, message['ReceiptHandle'])
