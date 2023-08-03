@@ -18,6 +18,7 @@ const Dashboard = () => {
     const { logOut, user } = UserAuth();
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
+    const [userProfileData, setUserProfileData] = React.useState({});
 
 
     const getNotifications = () => {
@@ -58,12 +59,15 @@ const Dashboard = () => {
 
     useEffect(() => {
         if(user == null || user == {} || user == undefined ){
+            //if user is not authorized
             navigate('/');
         }
         const uid = user?.uid;
         fetch(`https://us-central1-serverless-sdp19.cloudfunctions.net/get_user_by_id?uid=${uid}`)
             .then(response => response.json())
             .then(data => {
+                setUserProfileData(data)
+                //set user in local storage
                 localStorage.setItem('currentLoggedInUser',JSON.stringify(data));
             })
             .catch(error => {
@@ -80,6 +84,11 @@ const Dashboard = () => {
         navigate("/game-lobby")
     }
 
+    function handleProfileClick() {
+        const data1 = { message: userProfileData };
+        navigate("/profile",{state : data1})
+    }
+
     return <>
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ display: 'flex' }}>
@@ -87,7 +96,7 @@ const Dashboard = () => {
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
-                            pr: '24px', // keep right padding when drawer closed
+                            pr: '24px',
                         }}
                     >
                         <Typography
@@ -101,12 +110,15 @@ const Dashboard = () => {
                         </Typography>
                         <IconButton color="inherit" >
                             <Badge color="secondary">
-                                <AccountCircleIcon sx={{ mr: 2}} />
+                                {/*User Profile Menu*/}
+                                <AccountCircleIcon onClick={handleProfileClick} sx={{ mr: 2}} />
                             </Badge>
                             <Badge badgeContent={4} color="secondary">
+                                {/*Notification Menu*/}
                                 <NotificationsIcon onClick={getNotifications} />
                             </Badge>
                         </IconButton>
+                        {/*Logout*/}
                         <Button sx={{ ml: 2}} variant="contained" onClick={handleLogOut}>Logout</Button>
                     </Toolbar>
                 </AppBar>

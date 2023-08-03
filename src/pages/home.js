@@ -5,15 +5,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import GoogleButton from "react-google-button";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SocialIcon } from 'react-social-icons';
@@ -33,10 +30,10 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        console.log(email,password,"e>>>>> before user created")
         try {
             await createUser(email, password, firstName);
-            console.log(e,"e>>>>> after user created")
+            console.log(e,"Register User Details")
+            // redirect to MFA page if all values are correct
             navigate('/authQuestions')
         } catch (e) {
             setError(e.message);
@@ -47,6 +44,7 @@ const Home = () => {
     };
     const handleFacebookSignIn = async () => {
         try {
+            // to call facebook login from auth context
             await facebookSignIn();
         } catch (error) {
             console.log(error);
@@ -56,6 +54,7 @@ const Home = () => {
 
     const handleGoogleSignIn = async () => {
         try {
+            // to call google login from auth context
             await googleSignIn();
         } catch (error) {
             console.log(error);
@@ -98,9 +97,10 @@ const Home = () => {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
+                                {/*First name*/}
                                 <TextField
                                     autoComplete="given-name"
                                     name="firstName"
@@ -113,8 +113,8 @@ const Home = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
+                                {/*Last Name*/}
                                 <TextField
-                                    required
                                     fullWidth
                                     id="lastName"
                                     label="Last Name"
@@ -125,8 +125,8 @@ const Home = () => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                {/*Email*/}
                                 <TextField
-                                    required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
@@ -138,8 +138,8 @@ const Home = () => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                {/*Password*/}
                                 <TextField
-                                    required
                                     fullWidth
                                     name="password"
                                     label="Password"
@@ -160,7 +160,6 @@ const Home = () => {
                             Sign Up
                         </Button>
                         <Grid container justifyContent="center" >
-                            {/*<GoogleButton style={{maxWidth: "205px"}} onClick={handleGoogleSignIn} />*/}
                             <SocialIcon style={{marginRight: "5px"}} network="google" onClick={handleGoogleSignIn}/>
                             <SocialIcon  network="facebook" onClick={handleFacebookSignIn}/>
                         </Grid>

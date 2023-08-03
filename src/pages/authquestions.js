@@ -50,7 +50,6 @@ const AuthQuestions = () => {
     };
 
     useEffect(() => {
-        console.log(user.uid,"user>>>AuthQ");
         setFormData((prevData) => ({
             ...prevData,
             uid: user?.uid,
@@ -65,12 +64,9 @@ const AuthQuestions = () => {
             .then((response) => response.json())
             .then((data) => {
                 // Handle the response data
-                console.log(data,"llllllll",formData.favoriteSports)
+                // if MAFA is present in DB
                 if(data["body"]["favoriteSports"].toLowerCase()){
-                    console.log("IF CONDITION ")
                     navigate('/askQuestion');
-                }else{
-
                 }
                 console.log('Response:', data);
             })
