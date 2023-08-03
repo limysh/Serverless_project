@@ -1,0 +1,12 @@
+{
+  "name": "lex_team_helper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.9.0"
+  }
+}
