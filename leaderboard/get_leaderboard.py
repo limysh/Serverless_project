@@ -30,11 +30,15 @@ def lambda_handler(event, context):
     game_id = body.get('game_id', None)
     time_frame = body.get('time_frame', None)
     
-    if game_id is not None and entity_type is None:
-        return get_game_stats(Attr('game_id').eq(game_id))
     
     # Set the filter expression for the query
     filter_expression = Attr('entity_type').eq(entity_type)
+    
+    
+    if game_id is not None and entity_type is None:
+        return get_game_stats(Attr('game_id').eq(game_id))
+    elif game_id is not None:
+        filter_expression = filter_expression & Attr('game_id').eq(game_id)
 
     create_date = None
 

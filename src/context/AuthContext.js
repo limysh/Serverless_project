@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const createUser = (email, password, firstName) => {
         return createUserWithEmailAndPassword(auth, email, password).then((user) => {
-            console.log(user.user.uid,"user in auth context>>>>>>>>", user["user"]["uid"])
+            console.log(user.user.uid,"user in auth context for email")
             fetch('https://us-central1-serverless-sdp19.cloudfunctions.net/add_users', {
                 method: 'POST',
                 headers: {
@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }) => {
     const googleSignIn = async () => {
         const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider).then((user) => {
-            console.log(user.user.uid,"google>>>>>>>>", user)
+            console.log(user.user.uid,"user in auth context for google")
             fetch('https://us-central1-serverless-sdp19.cloudfunctions.net/add_users', {
                 method: 'POST',
                 headers: {
@@ -67,9 +67,26 @@ export const AuthContextProvider = ({ children }) => {
         // signInWithRedirect(auth, provider)
     };
 
-    const facebookSignIn = async () => {
+    const facebookSignIn =  () => {
         const provider = new FacebookAuthProvider();
-        await signInWithPopup(auth, provider).then(r => navigate('/authQuestions'));
+        signInWithPopup(auth, provider).then((user) => {
+            console.log(user.user.uid,"user in auth context for facebook")
+            fetch('https://us-central1-serverless-sdp19.cloudfunctions.net/add_users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify({"uid" : user.user.uid, "display_name" : user.user.displayName, "email" : user.user.email,
+                    "photo_url" : user.user.photoURL}),
+            }).then((data) => {
+                navigate('/authQuestions')
+                console.log('Response:', data);
+            })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
         // signInWithRedirect(auth, provider)
     };
 
@@ -80,7 +97,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
-            console.log('User', currentUser,"checkNewUser>>>",currentUser?.additionalUserInfo?.isNewUser)
+            console.log('User', currentUser,"checkNewUser",currentUser?.additionalUserInfo?.isNewUser)
         });
         return () => {
             unsubscribe();

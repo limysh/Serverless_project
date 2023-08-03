@@ -3,7 +3,7 @@ import { Grid, TextField, Button } from '@mui/material';
 import Typography from "@mui/material/Typography";
 import {UserAuth} from "../context/AuthContext";
 import {useNavigate} from "react-router-dom";
-import {toast} from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const AskQuestion = () => {
@@ -30,31 +30,22 @@ const AskQuestion = () => {
             try {
                 const jsonFormat = JSON.stringify(formData, null, 2);
                 console.log(jsonFormat);
-                await fetch('https://03gqvg5c3h.execute-api.us-east-1.amazonaws.com/dev/get_data_from_user_id', {
+                const response = await fetch('https://03gqvg5c3h.execute-api.us-east-1.amazonaws.com/dev/get_data_from_user_id', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData),
                 })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // Handle the response data
-                        console.log(data["body"]["favoriteSports"], "llllllll", formData.favoriteSports)
-                        if (data["body"]["favoriteSports"].toLowerCase() === formData.favoriteSports.toLowerCase()) {
-                            console.log("IF CONDITION ")
-                            navigate('/dashboard');
-                        } else {
-                            console.log("ELSE CONDITION ")
-                        }
-                        console.log('Response:', data);
-                    })
-                    .catch((error) => {
-                        // Handle any errors that occurred during the request
-                        console.error('Error:', error);
-                        notify();
-
-                    });
+                  const {body} = await response.json();
+                console.log('response', body);
+                // Check MFA answer and match it with user's answer
+                if(body?.favoriteFood.toLowerCase() !== formData.favoriteSports.toLowerCase()) {
+                    toast('Wrong MFA Answer');
+                }else{
+                    //if MFA answer is correct then redirect to dashboard
+                    navigate('/dashboard');
+                }
             }
             catch (e) {
                 notify();
@@ -64,7 +55,6 @@ const AskQuestion = () => {
     };
 
     useEffect(() => {
-        console.log(user.uid,"user>>>AuthQ");
         setFormData((prevData) => ({
             ...prevData,
             uid: user?.uid,
@@ -106,6 +96,7 @@ const AskQuestion = () => {
                         <Button variant="contained" color="primary" type="submit">
                             Submit
                         </Button>
+                        <ToastContainer />
                     </Grid>
                 </Grid>
             </form>
