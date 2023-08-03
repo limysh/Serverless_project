@@ -15,13 +15,14 @@ const QuizGame = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [isQuizCompleted, setIsQuizCompleted] = useState(false);
     const [timer, setTimer] = useState(null);
-    const [countdown, setCountdown] = useState(10);
+    const [countdown, setCountdown] = useState(20); //20sec
     const [explanations, setExplanations] = useState({}); // Added explanations state variable
 
     // Fetch game data from the API when the component mounts
     useEffect(() => {
         if (state && state.message && state.message.game_Id) {
-            const gameId = "CRICKETQUIZ2023";
+            // const gameId = state.message.data;
+            const gameId="GEOGRAPHYQUIZ2023";
             fetch(`https://us-central1-sdp-19.cloudfunctions.net/manage_game`, {
                 method: 'POST',
                 headers: {
@@ -150,8 +151,8 @@ const QuizGame = () => {
     useEffect(() => {
         const questionInterval = setInterval(() => {
             setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-            setCountdown(3);
-        }, 3000);
+            setCountdown(3); //20sec
+        }, 3000); //20sec
 
         setTimer(questionInterval);
 
@@ -170,7 +171,7 @@ const QuizGame = () => {
 
         // Reset the countdown for the current question
         if (currentQuestionIndex >= 0 && currentQuestionIndex < questionNumbers.length) {
-            setCountdown(3);
+            setCountdown(3); //20
         }
     }, [timer, countdown, currentQuestionIndex, questionNumbers.length]);
 
