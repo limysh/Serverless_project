@@ -1,9 +1,9 @@
-.chartContainer {
-    margin: auto;
-    width: 600px;
-    height: 600px
+.chartTitle {
+    margin-top: 17px;
 }
 
-.chartTitle {
-    margin-top: 15px;
+.chartContainer {
+    margin: auto;
+    width: 620px;
+    height: 620px
 }

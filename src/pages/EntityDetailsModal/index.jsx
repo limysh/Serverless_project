@@ -35,11 +35,11 @@ const EntityDetailsModal = ({ entityType, entityName, onClose, isOpen }) => {
     []
   );
 
-  const timeFrameOptions = [
+  const timeFrames = [
     { value: "daily", label: "Daily" },
     { value: "weekly", label: "Weekly" },
     { value: "monthly", label: "Monthly" },
-    { value: "all-time", label: "All Time" },
+    { value: "all time", label: "All Time" },
   ];
 
   const categoryOptions = [
@@ -57,7 +57,7 @@ const EntityDetailsModal = ({ entityType, entityName, onClose, isOpen }) => {
         {
           entity_type: entityType,
           name: entityName,
-          time_frame: timeFrame === "all-time" ? null : timeFrame,
+          time_frame: timeFrame === "all time" ? null : timeFrame,
           category: category === "all" ? null : category,
         }
       );
@@ -109,7 +109,7 @@ const EntityDetailsModal = ({ entityType, entityName, onClose, isOpen }) => {
               onChange={(e) => setTimeFrame(e.target.value)}
               label="Time Frame"
             >
-              {timeFrameOptions.map((option, index) => (
+              {timeFrames.map((option, index) => (
                 <MenuItem key={index} value={option.value}>
                   {option.label}
                 </MenuItem>

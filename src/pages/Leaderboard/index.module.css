@@ -7,19 +7,19 @@
   text-align: center;
 }
 
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
 .filters {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-bottom: 21px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 21px;
 }
 
 .statistics {
-  margin-top: 40px;
+  margin-top: 42px;
   text-align: center;
 }
