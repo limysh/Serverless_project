@@ -21,8 +21,8 @@ const QuizGame = () => {
     // Fetch game data from the API when the component mounts
     useEffect(() => {
         if (state && state.message && state.message.game_Id) {
-            // const gameId = state.message.data;
-            const gameId="GEOGRAPHYQUIZ2023";
+            const gameId = state.message.game_Id;
+            // const gameId="GEOGRAPHYQUIZ2023";
             fetch(`https://us-central1-sdp-19.cloudfunctions.net/manage_game`, {
                 method: 'POST',
                 headers: {
