@@ -96,7 +96,7 @@ const GameLobby = () => {
     const user_data = JSON.parse(localStorage.getItem("currentLoggedInUser"));
     console.log(user_data);
     const userId = user_data["uid"];
-    localStorage.setItem("userId", userId);
+    // localStorage.setItem("userId", userId);
   }, []);
 
   const calculateRemainingTime = (timeFrame) => {
@@ -138,7 +138,7 @@ const GameLobby = () => {
       const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
       console.log(user_data);
       const user_id = user_data["uid"];
-      localStorage.setItem("userId",user_id);
+      // localStorage.setItem("userId",user_id);
       gameLobbies.some((lobby) =>
         lobby.players.some((player) => console.log(player.id))
       );
