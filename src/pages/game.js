@@ -81,6 +81,10 @@ const GameLobby = () => {
     };
 
     fetchGameLobbies();
+    const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
+      console.log(user_data);
+      const userId = user_data["uid"];
+      localStorage.setItem("userId",userId);
   }, []);
 
   useEffect(() => {
@@ -104,7 +108,10 @@ const GameLobby = () => {
   const handleJoinGame = async (gameLobbyId, gameId) => {
     try {
       // Get the "userId" from localStorage
-      const userId = localStorage.getItem("userId");
+      const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
+      console.log(user_data);
+      const userId = user_data["uid"];
+      localStorage.setItem("userId",userId);
 
       // Check if the user is already in a game lobby
       const userInLobby = gameLobbies.some((lobby) =>
@@ -112,7 +119,7 @@ const GameLobby = () => {
       );
       let data1 =
       {
-        userId: localStorage.getItem("userId"),
+        userId: userId,
         game_Id: gameId,
         team_id: localStorage.getItem("teamId")
         
@@ -138,7 +145,7 @@ const GameLobby = () => {
         );
 
         const data = await response.json();
-        localstorage.setItem("teamId",data.teamId);
+        localStorage.setItem("teamId",data.teamId);
         console.log(data.message); // This will print the response message in the console.
 
         // Handle any other actions after successfully joining the game lobby, if needed.
