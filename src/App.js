@@ -21,6 +21,7 @@ import LeaderboardPage from "./pages/Leaderboard";
 import NotificationPage from "./pages/Notification";
 import ForgotPassword from "./pages/resetpassword";
 import UserProfile from "./profile";
+import TeamDetailsModal from "./pages/TeamDetailsModal";
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
             path="/edit-question-details"
           />
           <Route element={<DeleteQuestionPage />} path="/delete-question" />
+          <Route element={<TeamDetailsModal />} path="/team-details" />
+
           <Route element={<CreateGamePage />} path="/create-game" />
           <Route element={<ManageGamePage />} path="/edit-game" />
           <Route element={<LeaderboardPage />} path="/leaderboard" />
