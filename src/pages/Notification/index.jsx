@@ -6,7 +6,6 @@ const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Fetch notifications from the external API
     fetchNotifications();
   }, []);
 
@@ -18,11 +17,9 @@ const NotificationPage = () => {
       console.log(user_data);
       const user_id = user_data["uid"];
       console.log(user_id);
-      const id = "TeamW";
+      
+      const response = await axios.post(apiEndpoint, { user_id });
 
-      const response = await axios.post(apiEndpoint, { id });
-
-      // Assuming the response data is in the format { key: [notification1, notification2, ...] }
       console.log(response.data);
       setNotifications(response.data.notifications);
     } catch (error) {

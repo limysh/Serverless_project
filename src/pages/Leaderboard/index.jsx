@@ -23,7 +23,6 @@ const LeaderboardPage = () => {
 
 
   useEffect(() => {
-    // Fetch leaderboard data based on the selected time frame
     fetchLeaderboardData();
   }, [timeFrame, activeTab, category]);
 
@@ -32,7 +31,7 @@ const LeaderboardPage = () => {
       "https://oqgwtsxibuxjiprfkahpn7dhpa0mzvig.lambda-url.us-east-1.on.aws/",
       {
         entity_type: activeTab === 0 ? "team" : "player",
-        time_frame: timeFrame === "all-time" ? null : timeFrame,
+        time_frame: timeFrame === "all time" ? null : timeFrame,
         category: category === "all" ? null : category,
       }
     );
@@ -41,11 +40,9 @@ const LeaderboardPage = () => {
   };
 
 
-  // Define the columns for the leaderboard table
   const columns = React.useMemo(
     () => [
       { Header: "Name", accessor: "name" },
-      // { Header: "Category", accessor: "category" },
       { Header: "Right Answer", accessor: "total_right_answers" },
       { Header: "Wrong Answer", accessor: "total_wrong_answers" },
       { Header: "Score", accessor: "total_score" },
@@ -58,11 +55,11 @@ const LeaderboardPage = () => {
     setActiveTab(newValue);
   };
 
-  const timeFrameOptions = [
+  const timeFrames = [
     { value: "daily", label: "Daily" },
     { value: "weekly", label: "Weekly" },
     { value: "monthly", label: "Monthly" },
-    { value: "all-time", label: "All Time" },
+    { value: "all time", label: "All Time" },
   ];
 
   const categoryOptions = [
@@ -106,7 +103,7 @@ const LeaderboardPage = () => {
             value={timeFrame}
             onChange={(e) => setTimeFrame(e.target.value)}
             label="Time Frame">
-            {timeFrameOptions.map((option, index) => (
+            {timeFrames.map((option, index) => (
               <MenuItem key={index} value={option.value}>
                 {option.label}
               </MenuItem>
