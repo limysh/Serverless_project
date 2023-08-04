@@ -14,6 +14,7 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import useInterval from "use-interval";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
     alignItems: "center",
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
@@ -37,11 +38,22 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    marginRight: theme.spacing(2),
+    margin: theme.spacing(1),
   },
   formControl: {
     marginBottom: theme.spacing(2),
     minWidth: 150,
+  },
+  timer: {
+    fontSize: "1.2rem",
+    marginBottom: theme.spacing(1),
+  },
+  cardContent: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 }));
 
@@ -81,17 +93,33 @@ const GameLobby = () => {
     };
 
     fetchGameLobbies();
-    const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
-      console.log(user_data);
-      const userId = user_data["uid"];
-      localStorage.setItem("userId",userId);
+    const user_data = JSON.parse(localStorage.getItem("currentLoggedInUser"));
+    console.log(user_data);
+    const userId = user_data["uid"];
+    localStorage.setItem("userId", userId);
   }, []);
+
+  const calculateRemainingTime = (timeFrame) => {
+    const targetTime = new Date(timeFrame).getTime();
+    const currentTime = new Date().getTime();
+    const difference = targetTime - currentTime;
+    return Math.max(0, difference);
+  };
+
+  useInterval(() => {
+    const updatedLobbies = gameLobbies.map((lobby) => {
+      return {
+        ...lobby,
+        remainingTime: calculateRemainingTime(lobby.timeFrame),
+      };
+    });
+    setGameLobbies(updatedLobbies);
+  }, 1000);
 
   useEffect(() => {
     const applyFilters = () => {
       const filteredLobbies = gameLobbies.filter((lobby) => {
-        const categoryMatch =
-          !categoryFilter || lobby.category === categoryFilter;
+        const categoryMatch = !categoryFilter || lobby.category === categoryFilter;
         const difficultyMatch =
           !difficultyFilter || lobby.difficulty === difficultyFilter;
         const timeFrameMatch =
@@ -105,15 +133,13 @@ const GameLobby = () => {
     applyFilters();
   }, [gameLobbies, categoryFilter, difficultyFilter, timeFrameFilter]);
 
-  const handleJoinGame = async (gameLobbyId, gameId) => {
+ const handleJoinGame = async (gameLobbyId, gameId) => {
     try {
-      // Get the "userId" from localStorage
       const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
       console.log(user_data);
       const userId = user_data["uid"];
       localStorage.setItem("userId",userId);
 
-      // Check if the user is already in a game lobby
       const userInLobby = gameLobbies.some((lobby) =>
         lobby.players.some((team) => team.id === userId)
       );
@@ -146,11 +172,7 @@ const GameLobby = () => {
 
         const data = await response.json();
         localStorage.setItem("teamId",data.teamId);
-        console.log(data.message); // This will print the response message in the console.
-
-        // Handle any other actions after successfully joining the game lobby, if needed.
-        // For example, you might want to refresh the game lobby data after joining.
-        // fetchGameLobbies();
+        console.log(data.message); 
         window.location.reload();
       }
     } catch (error) {
@@ -158,11 +180,17 @@ const GameLobby = () => {
     }
   };
 
+
   const resetFilter = () => {
     setCategoryFilter("");
     setDifficultyFilter("");
     setTimeFrameFilter("");
     setFilteredLobbies([]);
+  };
+
+  const handleViewTeamDetails = () => {
+    // Redirect to the TeamDetails component with userId as state
+    navigate(`/team-details`);
   };
 
   const uniqueCategories = Array.from(
@@ -187,57 +215,56 @@ const GameLobby = () => {
         {(loading ? gameLobbies : filteredLobbies).map((lobby) => (
           <Grid item xs={12} sm={6} md={4} key={lobby.id}>
             <Card className={classes.card}>
-              <CardContent
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography variant="h5" align="center">
+              <CardContent className={classes.cardContent}>
+                <Typography variant="h5" align="center" gutterBottom>
                   {lobby.name + " Lobby"}
                 </Typography>
-                <Typography align="center">Category: {lobby.category}</Typography>
-                <Typography align="center">
+                <Typography align="center" gutterBottom>
+                  Category: {lobby.category}
+                </Typography>
+                <Typography align="center" gutterBottom>
                   Difficulty: {lobby.difficulty}
                 </Typography>
-                <Typography align="center">
-                  Time Frame: {lobby.timeFrame + " Seconds"}
+                <Typography align="center" gutterBottom>
+                  Time Frame: {lobby.timeFrame}
                 </Typography>
+                {lobby.remainingTime > 0 && (
+                  <Typography className={classes.timer} color="secondary">
+                    Start Game in {Math.ceil(lobby.remainingTime / 1000)} seconds
+                  </Typography>
+                )}
                 <Typography variant="body2" align="center">
                   Players:
                 </Typography>
                 <ul>
                   {lobby.players.map((team) =>
                     team.id !== null && team.name !== null ? (
-                      <li
-                        key={team.id}
-                        style={{
-                          fontSize: "0.9rem", // Adjust the font size as needed
-                          whiteSpace: "pre-line", // Allow line breaks
-                        }}
-                      >
+                      <li key={team.id}>
                         {team.playerName} - {team.name}
-                        <br />
                       </li>
                     ) : null
                   )}
                 </ul>
-                {lobby.players.some((team) => team.id === localStorage.getItem("userId")) ? (
+                {lobby.players.some(
+                  (team) => team.id === localStorage.getItem("userId")
+                ) ? (
                   <Button
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id,lobby.gameId)}
+                    onClick={() => handleJoinGame(lobby.id, lobby.gameId)}
+                    disabled={lobby.remainingTime > 0}
                   >
-                    Start Game
+                    {lobby.remainingTime > 0
+                      ? `Start Game in ${Math.ceil(lobby.remainingTime / 1000)} seconds`
+                      : "Start Game"}
                   </Button>
                 ) : (
                   <Button
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id,lobby.gameId,)}
+                    onClick={() => handleJoinGame(lobby.id, lobby.gameId)}
                   >
                     Join Lobby
                   </Button>
@@ -302,6 +329,14 @@ const GameLobby = () => {
       </Grid>
       <Button variant="contained" color="default" onClick={resetFilter}>
         Reset Filter
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        onClick={handleViewTeamDetails}
+      >
+        View Team Details
       </Button>
       <Button variant="contained" color="default" onClick={handleLogOut}>
         Logout
