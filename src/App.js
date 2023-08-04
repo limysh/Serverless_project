@@ -22,6 +22,7 @@ import NotificationPage from "./pages/Notification";
 import ForgotPassword from "./pages/resetpassword";
 import UserProfile from "./profile";
 import TeamDetailsModal from "./pages/TeamDetailsModal";
+import ChatPage from "./pages/chatPage";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
 
           <Route element={<Home />} path="/" />
           <Route element={<QuizGame />} path="/game-experience" />
+          <Route element={<ChatPage />} path="/chatpage" />
         </Routes>
       </AuthContextProvider>
     </div>
