@@ -15,9 +15,9 @@ import Table from "../Table";
 import styles from "./index.module.css";
 import Chart from "../Chart";
 
-const LeaderboardPage = () => {
+const LeaderboardPage = ({ user_ids }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
-  const [timeFrame, setTimeFrame] = useState("all-time");
+  const [timeFrame, setTimeFrame] = useState("all time");
   const [category, setCategory] = useState("all");
   const [activeTab, setActiveTab] = useState(0);
 
@@ -36,7 +36,14 @@ const LeaderboardPage = () => {
       }
     );
     const fetchedData = resp.data;
-    setLeaderboardData(fetchedData);
+    if (user_ids && user_ids.length > 0) {
+      // Filter the fetched data based on user_ids
+      const filteredData = fetchedData.filter((item) => user_ids.includes(item.id));
+      setLeaderboardData(filteredData);
+    } else {
+      // If user_ids are not provided, include everything
+      setLeaderboardData(fetchedData);
+    }
   };
 
 

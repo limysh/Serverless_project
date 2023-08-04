@@ -14,7 +14,7 @@ import styles from "../Leaderboard/index.module.css";
 
 const EntityDetailsModal = ({ entityType, entityName, onClose, isOpen }) => {
   const [entityData, setEntityData] = useState([]);
-  const [timeFrame, setTimeFrame] = useState("all-time");
+  const [timeFrame, setTimeFrame] = useState("all time");
   const [category, setCategory] = useState("all");
 
   useEffect(() => {
