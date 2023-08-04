@@ -21,8 +21,9 @@ import LeaderboardPage from "./pages/Leaderboard";
 import NotificationPage from "./pages/Notification";
 import ForgotPassword from "./pages/resetpassword";
 import UserProfile from "./profile";
-import TeamDetailsModal from "./pages/TeamDetailsModal";
+
 import ChatPage from "./pages/chatPage";
+import TeamDetails from "./pages/TeamDetails";
 
 function App() {
   return (
@@ -45,7 +46,7 @@ function App() {
             path="/edit-question-details"
           />
           <Route element={<DeleteQuestionPage />} path="/delete-question" />
-          <Route element={<TeamDetailsModal />} path="/team-details" />
+          <Route element={<TeamDetails />} path="/team-details" />
 
           <Route element={<CreateGamePage />} path="/create-game" />
           <Route element={<ManageGamePage />} path="/edit-game" />
@@ -57,8 +58,11 @@ function App() {
           />
 
           <Route element={<Home />} path="/" />
+
           <Route element={<QuizGame />} path="/game-experience" />
           <Route element={<ChatPage />} path="/chatpage" />
+
+
         </Routes>
       </AuthContextProvider>
     </div>

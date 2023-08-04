@@ -17,7 +17,7 @@ def lambda_handler(event, context):
         response = {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
+                'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
             }
@@ -45,7 +45,6 @@ def lambda_handler(event, context):
     if category is not None:
         print("category")
         print(category)
-        # Set the filter expression for the query
         filter_expression = filter_expression & Attr('category').eq(category)
 
     # Set the default time frame to all-time
@@ -113,7 +112,7 @@ def get_leaderboard(filter_expression):
         'statusCode': 200,
         'body': json.dumps(leaderboard_data, default=str),
         'headers': {
-            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
+            'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
@@ -140,7 +139,7 @@ def get_entity_stats(filter_expression):
         'statusCode': 200,
         'body': json.dumps(entity_data, default=str),
         'headers': {
-            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
+            'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
@@ -163,7 +162,7 @@ def get_game_stats(filter_expression):
         'statusCode': 200,
         'body': json.dumps(entity_data, default=str),
         'headers': {
-            'Access-Control-Allow-Origin': '*',  # You can restrict this to specific domains if needed
+            'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }

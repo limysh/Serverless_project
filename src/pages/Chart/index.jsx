@@ -6,10 +6,8 @@ import classes from "./index.module.css";
 import EntityDetailsModal from "../EntityDetailsModal";
 
 const ChartComponent = ({ data, entityType }) => {
-  // Get the top 3 entries
   const topEntries = data.slice(0, 3);
 
-  // Prepare the data for the chart
   const chartData = topEntries.map((entry) => ({
     name: entry.name,
     efficiency: entry.efficiency,
@@ -17,10 +15,8 @@ const ChartComponent = ({ data, entityType }) => {
     wrong_answers: entry.total_wrong_answers,
   }));
 
-  // State to manage the selected entity for the modal
   const [selectedEntity, setSelectedEntity] = useState(null);
 
-  // Click event handler for the chart bars
   const handleChartClick = (entry) => {
     console.log(entry.payload);
     setSelectedEntity(entry.activeLabel);
