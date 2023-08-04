@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -11,8 +11,12 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { toast } from "react-toastify";
+import axios from "axios";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,9 +47,57 @@ const TeamDetails = () => {
   const classes = useStyles();
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [teamDetails, setTeamDetails] = useState();
 
-  // Team data from localStorage
-  const teamData = JSON.parse(localStorage.getItem("teamDetails"));
+  const handleGetTeamDetails = async () => {
+    const userDetails = localStorage.getItem("currentLoggedInUser");
+    const userData = await JSON.parse(userDetails);
+
+    const userId = userData?.uid;
+
+    try {
+      const res = await axios.post(
+        `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/get_user_team?id=${userId}`
+      );
+
+      if (res.status < 400) {
+        const createTeamRes = res.data;
+        toast.success(createTeamRes?.message);
+        setTeamDetails(createTeamRes.team);
+      } else {
+        setTeamDetails(null);
+        console.error("An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error: " + error);
+      setTeamDetails(null);
+    }
+  };
+
+  const handleDeleteTeamMember = async (id) => {
+    try {
+      const res = await axios.post(
+        `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/remove_from_team`,
+        {
+          userId: id,
+        }
+      );
+
+      if (res.status < 400) {
+        const createTeamRes = res.data;
+        toast.success(createTeamRes?.message);
+        handleGetTeamDetails();
+      } else {
+        console.error("An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error: " + error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetTeamDetails();
+  }, []);
 
   const handleInviteClick = () => {
     setInviteModalOpen(true);
@@ -66,18 +118,29 @@ const TeamDetails = () => {
       <Typography variant="h4" className={classes.header}>
         Team Details
       </Typography>
-      {teamData ? (
+      {teamDetails ? (
         <div>
-          <Typography variant="h6">Team Name: {teamData.teamname}</Typography>
+          <Typography variant="h6">
+            Team Name: {teamDetails.teamname}
+          </Typography>
           <Typography variant="subtitle1">Team Members:</Typography>
           <List className={classes.teamMembersList}>
-            {teamData.teamMembers.map((memberId) => (
+            {teamDetails.teamMembers.map((memberId) => (
               <ListItem key={memberId}>
                 <ListItemText primary={`Member ID: ${memberId}`} />
+                <IconButton>
+                  <DeleteIcon
+                    onClick={() => handleDeleteTeamMember(memberId)}
+                  />
+                </IconButton>
               </ListItem>
             ))}
           </List>
-          <Button variant="contained" color="primary" onClick={handleInviteClick}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleInviteClick}
+          >
             Invite Other Players
           </Button>
         </div>

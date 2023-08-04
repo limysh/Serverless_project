@@ -48,7 +48,6 @@ const Dashboard = () => {
         `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/create_team`,
         body
       );
-      console.log("🚀 ~ file: dashboard.jsx:51 ~ handleCreateTeam ~ res:", res);
 
       if (res.status < 400) {
         const createTeamRes = await res.data;
