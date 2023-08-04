@@ -81,6 +81,10 @@ const GameLobby = () => {
     };
 
     fetchGameLobbies();
+    const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
+      console.log(user_data);
+      const userId = user_data["uid"];
+      localStorage.setItem("userId",userId);
   }, []);
 
   useEffect(() => {
@@ -104,7 +108,10 @@ const GameLobby = () => {
   const handleJoinGame = async (gameLobbyId, gameId) => {
     try {
       // Get the "userId" from localStorage
-      const userId = localStorage.getItem("userId");
+      const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
+      console.log(user_data);
+      const userId = user_data["uid"];
+      localStorage.setItem("userId",userId);
 
       // Check if the user is already in a game lobby
       const userInLobby = gameLobbies.some((lobby) =>
@@ -112,8 +119,10 @@ const GameLobby = () => {
       );
       let data1 =
       {
-        userId: localStorage.getItem("userId"),
-        game_Id: gameId
+        userId: userId,
+        game_Id: gameId,
+        team_id: localStorage.getItem("teamId")
+        
       }
       const data = { message: data1 };
       console.log(data,"out if");
@@ -132,12 +141,11 @@ const GameLobby = () => {
               gameLobbyId: gameLobbyId,
               userId: userId,
             }),
-          }
-
-          
+          } 
         );
 
         const data = await response.json();
+        localStorage.setItem("teamId",data.teamId);
         console.log(data.message); // This will print the response message in the console.
 
         // Handle any other actions after successfully joining the game lobby, if needed.
@@ -229,7 +237,7 @@ const GameLobby = () => {
                     variant="contained"
                     color="secondary"
                     className={classes.button}
-                    onClick={() => handleJoinGame(lobby.id,lobby.gameId)}
+                    onClick={() => handleJoinGame(lobby.id,lobby.gameId,)}
                   >
                     Join Lobby
                   </Button>

@@ -40,7 +40,7 @@ const AskQuestion = () => {
                   const {body} = await response.json();
                 console.log('response', body);
                 // Check MFA answer and match it with user's answer
-                if(body?.favoriteFood.toLowerCase() !== formData.favoriteSports.toLowerCase()) {
+                if(body?.favoriteSports.toLowerCase() !== formData.favoriteSports.toLowerCase()) {
                     toast('Wrong MFA Answer');
                 }else{
                     //if MFA answer is correct then redirect to dashboard
