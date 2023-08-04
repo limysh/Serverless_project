@@ -123,7 +123,6 @@ const LeaderboardPage = ({ user_ids }) => {
         <Typography variant="h5" align="center" gutterBottom>
           Statistics
         </Typography>
-        {/* Add your graph component here */}
         <Chart data={leaderboardData} entityType={activeTab === 0 ? "team" : "player"} />
       </Box>
     </Container>
