@@ -96,7 +96,7 @@ const GameLobby = () => {
     const user_data = JSON.parse(localStorage.getItem("currentLoggedInUser"));
     console.log(user_data);
     const userId = user_data["uid"];
-    localStorage.setItem("userId", userId);
+    // localStorage.setItem("userId", userId);
   }, []);
 
   const calculateRemainingTime = (timeFrame) => {
@@ -137,15 +137,19 @@ const GameLobby = () => {
     try {
       const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
       console.log(user_data);
-      const userId = user_data["uid"];
-      localStorage.setItem("userId",userId);
-
-      const userInLobby = gameLobbies.some((lobby) =>
-        lobby.players.some((team) => team.id === userId)
+      const user_id = user_data["uid"];
+      // localStorage.setItem("userId",user_id);
+      gameLobbies.some((lobby) =>
+        lobby.players.some((player) => console.log(player.id))
       );
+      const userID = localStorage.getItem("userId")
+      const userInLobby = gameLobbies.some((lobby) =>
+        lobby.players.some((player) => player.id === userID)
+      );
+      console.log(userInLobby);
       let data1 =
       {
-        userId: userId,
+        userId: userID,
         game_Id: gameId,
         team_id: localStorage.getItem("teamId")
         
@@ -165,7 +169,7 @@ const GameLobby = () => {
             },
             body: JSON.stringify({
               gameLobbyId: gameLobbyId,
-              userId: userId,
+              userId: userID,
             }),
           } 
         );
@@ -173,6 +177,7 @@ const GameLobby = () => {
         const data = await response.json();
         localStorage.setItem("teamId",data.teamId);
         console.log(data.message); 
+        localStorage.setItem("teamDetails", JSON.stringify(data.teamData.team));
         window.location.reload();
       }
     } catch (error) {
