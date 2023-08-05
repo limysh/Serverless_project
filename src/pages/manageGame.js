@@ -15,6 +15,13 @@ const ManageGamePage = () => {
       gameId: gameId
     };
 
+    if (requestData.gameId === null || requestData.gameId === "") {
+      // If 'gameId' is null or empty, show an alert message
+      alert("Please provide a valid game ID.");
+      // You can customize the alert message as per your requirement
+      return; // Stop further execution of the function
+    }
+    
     // Make the backend request here
     fetch('https://us-central1-sdp-19.cloudfunctions.net/manage_game', {
       method: 'POST',
@@ -43,7 +50,6 @@ const ManageGamePage = () => {
           label="Game ID"
           value={gameId}
           onChange={(e) => setGameId(e.target.value)}
-          required
         />
         <Button type="submit" variant="contained">
           Submit

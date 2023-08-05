@@ -14,7 +14,12 @@ const EditQuestionPage = () => {
     const requestData = {
       questionNumber: questionNumber
     };
-
+    if (requestData.questionNumber === null || requestData.questionNumber === "") {
+      // If 'questionNumber' is null or empty, show an alert message
+      alert("Please provide a valid question number.");
+      // You can customize the alert message as per your requirement
+      return; // Stop further execution of the function
+    }
     // Place url of cloud funccctions
     fetch('https://us-central1-sdp-19.cloudfunctions.net/edit_question', {
       method: 'POST',
@@ -43,7 +48,6 @@ const EditQuestionPage = () => {
           label="Question Number"
           value={questionNumber}
           onChange={(e) => setQuestionNumber(e.target.value)}
-          required
         />
         <Button type="submit" variant="contained">
           Submit
