@@ -1,31 +1,31 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext";
+import LeaderboardPage from "./pages/Leaderboard";
+import NotificationPage from "./pages/Notification";
+import AddQuestionForm from "./pages/addQuestion";
+import TriviaContentManagementPage from "./pages/admin";
+import AskQuestion from "./pages/askquestion";
+import AuthQuestions from "./pages/authquestions";
+import CreateGamePage from "./pages/createGame";
+import Dashboard from "./pages/dashboard";
+import DeleteQuestionPage from "./pages/deleteQuestion";
+import EditQuestionDetailsPage from "./pages/editQuestionDetails";
+import EditQuestionPage from "./pages/editquestion";
+import GameLobby from "./pages/game"; // Import the GameLobby component
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
-import { AuthContextProvider } from "./context/AuthContext";
-import Dashboard from "./pages/dashboard";
-import GameLobby from "./pages/game"; // Import the GameLobby component
-import TriviaContentManagementPage from "./pages/admin";
-import AddQuestionForm from "./pages/addQuestion";
-import EditQuestionPage from "./pages/editquestion";
-import EditQuestionDetailsPage from "./pages/editQuestionDetails";
-import DeleteQuestionPage from "./pages/deleteQuestion";
-import CreateGamePage from "./pages/createGame";
 import ManageGamePage from "./pages/manageGame";
 import ManageGameDetailsPage from "./pages/manageGameDetails";
-import AuthQuestions from "./pages/authquestions";
-import AskQuestion from "./pages/askquestion";
 import QuizGame from "./pages/quizGame";
-import LeaderboardPage from "./pages/Leaderboard";
-import NotificationPage from "./pages/Notification";
 import ForgotPassword from "./pages/resetpassword";
 import UserProfile from "./profile";
 
-import ChatPage from "./pages/chatPage";
-import TeamDetails from "./pages/TeamDetails";
-import CreateGameLobbies from "./pages/createGameLobbies";
 import AcceptTeamInvite from "./pages/AcceptTeamInvite";
+import TeamDetails from "./pages/TeamDetails";
+import ChatPage from "./pages/chatPage";
+import CreateGameLobbies from "./pages/createGameLobbies";
 
 function App() {
   return (
