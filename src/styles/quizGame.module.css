@@ -82,3 +82,41 @@
     margin-top: 8px;
   }
   
+  /* Styles for the container div holding the button */
+div.private-chat-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .privateChatContainer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Styles for the "Private chat" button */
+  .privateChatButton {
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue color - you can change this to your desired color */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for the button */
+  .privateChatButton:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+  .chatContainer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Styles for the chat heading */
+  .chatHeading {
+    font-size: 24px;
+    font-weight: bold;
+  }

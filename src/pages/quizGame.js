@@ -217,7 +217,15 @@ const QuizGame = () => {
           </ul>
         </div>
       )}
+      <h3>Global chat</h3>
       <div><Chat room={state.message.game_Id} /></div>
+      <div className={styles.privateChatContainer}>
+        {/* The "Private chat" button that opens in a new tab */}
+        <Link to="/chatpage" target="_blank">
+          <button className={styles.privateChatButton}>Private chat</button>
+        </Link>
+      </div>
+
 
       {isQuizCompleted && currentQuestionIndex === questionNumbers.length && (
         <div className={styles.quizend}>
