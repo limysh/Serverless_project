@@ -12,11 +12,15 @@ import {
   DialogActions,
   TextField,
   IconButton,
+  ButtonBase,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import axios from "axios";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import AddModeratorIcon from "@mui/icons-material/AddModerator";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,13 +52,30 @@ const TeamDetails = () => {
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [teamDetails, setTeamDetails] = useState();
+  const [userTeamDetails, setUserTeamDetails] = useState();
+
+  const userDetails = localStorage.getItem("currentLoggedInUser");
+  const userData = JSON.parse(userDetails);
+  const userId = userData?.uid;
+
+  useEffect(() => {
+    if (teamDetails) {
+      console.log(
+        "🚀 ~ file: TeamDetails.js:65 ~ useEffect ~ teamDetails:",
+        teamDetails
+      );
+      const userTeamData = teamDetails.teamMembersData.filter(
+        (member) => member.userId == userId
+      );
+      console.log(
+        "🚀 ~ file: TeamDetails.js:66 ~ useEffect ~ userTeamData:",
+        userTeamData
+      );
+      if (userTeamData.length) setUserTeamDetails(userTeamData[0]);
+    }
+  }, [teamDetails]);
 
   const handleGetTeamDetails = async () => {
-    const userDetails = localStorage.getItem("currentLoggedInUser");
-    const userData = await JSON.parse(userDetails);
-
-    const userId = userData?.uid;
-
     try {
       const res = await axios.post(
         `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/get_user_team?id=${userId}`
@@ -63,7 +84,7 @@ const TeamDetails = () => {
       if (res.status < 400) {
         const createTeamRes = res.data;
         toast.success(createTeamRes?.message);
-        setTeamDetails(createTeamRes.team);
+        setTeamDetails(createTeamRes);
       } else {
         setTeamDetails(null);
         console.error("An error occurred.");
@@ -121,18 +142,38 @@ const TeamDetails = () => {
       {teamDetails ? (
         <div>
           <Typography variant="h6">
-            Team Name: {teamDetails.teamname}
+            Team Name: {teamDetails.team.teamname}
           </Typography>
           <Typography variant="subtitle1">Team Members:</Typography>
           <List className={classes.teamMembersList}>
-            {teamDetails.teamMembers.map((memberId) => (
-              <ListItem key={memberId}>
-                <ListItemText primary={`Member ID: ${memberId}`} />
-                <IconButton>
-                  <DeleteIcon
-                    onClick={() => handleDeleteTeamMember(memberId)}
-                  />
-                </IconButton>
+            {teamDetails.teamMembersData.map((teamMemberDetails) => (
+              <ListItem key={teamMemberDetails?.userId}>
+                <ListItemText primary={` ${teamMemberDetails.username}`} />
+                <ListItemText
+                  primary={`Member ID: ${teamMemberDetails?.userId}`}
+                />
+
+                <ButtonBase>Role: {teamMemberDetails?.role}</ButtonBase>
+
+                {userTeamDetails?.role === "admin" &&
+                teamMemberDetails?.role !== "admin" ? (
+                  <IconButton>
+                    <AddModeratorIcon
+                      onClick={() =>
+                        handleDeleteTeamMember(teamMemberDetails?.userId)
+                      }
+                    />
+                  </IconButton>
+                ) : null}
+                {userTeamDetails?.role === "admin" ? (
+                  <IconButton>
+                    <PersonRemoveIcon
+                      onClick={() =>
+                        handleDeleteTeamMember(teamMemberDetails?.userId)
+                      }
+                    />
+                  </IconButton>
+                ) : null}
               </ListItem>
             ))}
           </List>
