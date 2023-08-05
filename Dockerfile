@@ -1,25 +1,17 @@
-FROM node:current-alpine3.17 as builder
+FROM --platform=linux/amd64 node:alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json .
-
-COPY package-lock.json .
-
-RUN npm install
-
-COPY . .
+ENV PATH /app/node_modules/.bin:$PATH
 
 EXPOSE 80
 
-RUN npm run build
+COPY package.json ./
 
-FROM nginx
+COPY package-lock.json ./
 
-WORKDIR /usr/share/nginx/html
+RUN npm install --silent
 
-RUN rm -rf ./*
+COPY . ./
 
-COPY --from=builder /usr/src/app/build .
-
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+CMD ["npm", "start"]
