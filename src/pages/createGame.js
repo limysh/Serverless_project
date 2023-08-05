@@ -26,6 +26,14 @@ const CreateGamePage = () => {
       questionNumbers,
     };
 
+    for (const key in gameData) {
+      if (gameData[key] === null || gameData[key] === "") {
+        // If any field is null or empty, show an alert message
+        alert("Please fill in all required fields.");
+        // You can customize the alert message as per your requirement
+        return; // Stop further execution of the function
+      }
+    }
     // Make the backend request here
     fetch('https://us-central1-sdp-19.cloudfunctions.net/create_game', {
       method: 'POST',

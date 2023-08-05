@@ -12,6 +12,12 @@ const DeleteQuestionPage = () => {
       questionNumber: question,
     };
     
+    if (requestData.questionNumber === null || requestData.questionNumber === "") {
+      // If 'questionNumber' is null or empty, show an alert message
+      alert("Please provide a valid question number.");
+      // You can customize the alert message as per your requirement
+      return; // Stop further execution of the function
+    }
     // Place url of cloud funccctions
     fetch('https://us-central1-sdp-19.cloudfunctions.net/delete_question', {
       method: 'POST',

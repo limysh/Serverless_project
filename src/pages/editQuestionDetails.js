@@ -19,6 +19,12 @@ const EditQuestionDetailsPage = () => {
   const handleSaveChanges = () => {
     // Make the backend request here
     // Place url of cloud funccctions
+    if (questionData === null || questionData === "") {
+      // If 'questionNumber' is null or empty, show an alert message
+      alert("Please provide a valid question number.");
+      // You can customize the alert message as per your requirement
+      return; // Stop further execution of the function
+    }
     fetch('https://us-central1-sdp-19.cloudfunctions.net/add_question', {
       method: 'POST',
       headers: {

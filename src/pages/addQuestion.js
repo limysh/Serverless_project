@@ -22,7 +22,14 @@ const AddQuestionForm = () => {
       category,
       difficultyLevel,
     };
-
+    for (const key in questionData) {
+      if (questionData[key] === null || questionData[key] === "") {
+        // If any field is null or empty, show an alert message
+        alert("Please fill in all required fields.");
+        // You can customize the alert message as per your requirement
+        return; // Stop further execution of the function
+      }
+    }
     // Make the POST request to the backend server
     // Place url of cloud funccctions
     fetch('https://us-central1-sdp-19.cloudfunctions.net/add_question', {
@@ -64,6 +71,7 @@ const AddQuestionForm = () => {
             onChange={(e) => setQuestionNumber(e.target.value)}
             fullWidth
             margin="normal"
+            required
           />
         </div>
         <div className={styles.formRow}>
@@ -73,6 +81,7 @@ const AddQuestionForm = () => {
             onChange={(e) => setQuestionText(e.target.value)}
             fullWidth
             margin="normal"
+            required
           />
         </div>
         <div className={styles.formRow}>

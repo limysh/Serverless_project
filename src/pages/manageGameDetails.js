@@ -27,6 +27,14 @@ const ManageGameDetailsPage = () => {
       questionNumbers: gameData.questionNumbers,
     };
 
+    for (const key in requestData) {
+      if (requestData[key] === null || requestData[key] === "") {
+        // If any field is null or empty, show an alert message
+        alert("Please fill in all required fields.");
+        // You can customize the alert message as per your requirement
+        return; // Stop further execution of the function
+      }
+    }
     fetch('https://us-central1-sdp-19.cloudfunctions.net/create_game', {
       method: 'POST',
       headers: {
