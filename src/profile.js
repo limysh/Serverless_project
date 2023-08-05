@@ -145,7 +145,7 @@ function UserProfile() {
               User Profile Management
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={5.5}></Grid>
+          <Grid item xs={12} sm={2}></Grid>
           <Grid item xs={12} sm={6}>
             {imageUrl && (
               <>
@@ -209,13 +209,14 @@ function UserProfile() {
           </Grid>
         </Grid>
       </form>
-      <Table columns={columns} data={leaderboardData} />
+{/*      <Table columns={columns} data={leaderboardData} />
       <Box style={{marginTop: "42px", textAlign: "center"}}>
         <Typography variant="h5" align="center" gutterBottom>
           Statistics
         </Typography>
         <Chart data={leaderboardData} entityType="player" />
-      </Box>
+      </Box>*/}
+      <LeaderboardPage/>
     </div>
   );
 }
