@@ -116,6 +116,27 @@ const TeamDetails = () => {
     }
   };
 
+  const handlePromoteToAdmin = async (id) => {
+    try {
+      const res = await axios.post(
+        `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/promote_to_admin`,
+        {
+          userId: id,
+        }
+      );
+
+      if (res.status < 400) {
+        const createTeamRes = res.data;
+        toast.success(createTeamRes?.message);
+        handleGetTeamDetails();
+      } else {
+        console.error("An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error: " + error);
+    }
+  };
+
   useEffect(() => {
     handleGetTeamDetails();
   }, []);
@@ -160,7 +181,7 @@ const TeamDetails = () => {
                   <IconButton>
                     <AddModeratorIcon
                       onClick={() =>
-                        handleDeleteTeamMember(teamMemberDetails?.userId)
+                        handlePromoteToAdmin(teamMemberDetails?.userId)
                       }
                     />
                   </IconButton>
