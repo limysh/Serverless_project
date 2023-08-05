@@ -1,0 +1,122 @@
+/* QuizGame.module.css */
+
+/* Styles for the main container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Styles for the question area */
+  .question {
+    margin-bottom: 20px;
+  }
+  
+  .question p {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  /* Styles for the options list */
+  .options {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .options li {
+    margin-bottom: 10px;
+  }
+  
+  .options input[type="radio"] {
+    margin-right: 8px;
+  }
+  
+  /* Styles for the quiz end area */
+  .quizend {
+    text-align: center;
+  }
+  
+  .quiz-end h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-end button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  /* Styles for the leaderboard section */
+  .leaderboard {
+    margin-top: 30px;
+  }
+  
+  .leaderboard h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .leaderboard div {
+    margin-bottom: 20px;
+  }
+  
+  /* Styles for the explanations */
+  .explanation {
+    margin-top: 20px;
+  }
+  
+  .explanation h4 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .explanation p {
+    font-size: 16px;
+    margin-top: 8px;
+  }
+  
+  /* Styles for the container div holding the button */
+div.private-chat-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .privateChatContainer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Styles for the "Private chat" button */
+  .privateChatButton {
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue color - you can change this to your desired color */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for the button */
+  .privateChatButton:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+  .chatContainer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Styles for the chat heading */
+  .chatHeading {
+    font-size: 24px;
+    font-weight: bold;
+  }

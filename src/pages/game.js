@@ -96,7 +96,7 @@ const GameLobby = () => {
     const user_data = JSON.parse(localStorage.getItem("currentLoggedInUser"));
     console.log(user_data);
     const userId = user_data["uid"];
-    // localStorage.setItem("userId", userId);
+    localStorage.setItem("userId", userId);
   }, []);
 
   const calculateRemainingTime = (timeFrame) => {
@@ -137,8 +137,9 @@ const GameLobby = () => {
     try {
       const user_data = JSON.parse(localStorage.getItem('currentLoggedInUser'));
       console.log(user_data);
+
       const user_id = user_data["uid"];
-      // localStorage.setItem("userId",user_id);
+      localStorage.setItem("userId",user_id);
       gameLobbies.some((lobby) =>
         lobby.players.some((player) => console.log(player.id))
       );
@@ -177,8 +178,10 @@ const GameLobby = () => {
         const data = await response.json();
         localStorage.setItem("teamId",data.teamId);
         console.log(data.message); 
+
         localStorage.setItem("teamDetails", JSON.stringify(data.teamData.team));
         window.location.reload();
+
       }
     } catch (error) {
       console.error("Error joining game lobby:", error);
