@@ -17,7 +17,6 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import axios from "axios";
-
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import AddModeratorIcon from "@mui/icons-material/AddModerator";
@@ -137,6 +136,30 @@ const TeamDetails = () => {
     }
   };
 
+  const handleSendInvitation = async () => {
+    try {
+      const res = await axios.post(
+        `https://us-central1-csci-5410-assignment2-391801.cloudfunctions.net/send_invitation`,
+        {
+          username: inviteEmail,
+          email: inviteEmail,
+          teamId: teamDetails.teamId,
+          teamname: teamDetails.team.teamname,
+        }
+      );
+
+      if (res.status < 400) {
+        const createTeamRes = res.data;
+        toast.success(createTeamRes?.message);
+        handleGetTeamDetails();
+      } else {
+        console.error("An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error: " + error);
+    }
+  };
+
   useEffect(() => {
     handleGetTeamDetails();
   }, []);
@@ -146,7 +169,7 @@ const TeamDetails = () => {
   };
 
   const handleInviteSubmit = () => {
-    // Implement your invite logic here
+    handleSendInvitation();
     console.log("Inviting player with email:", inviteEmail);
     setInviteModalOpen(false);
   };
@@ -198,13 +221,15 @@ const TeamDetails = () => {
               </ListItem>
             ))}
           </List>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleInviteClick}
-          >
-            Invite Other Players
-          </Button>
+          {teamDetails ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleInviteClick}
+            >
+              Invite Other Players
+            </Button>
+          ) : null}
         </div>
       ) : (
         <Typography variant="body1">No team details found.</Typography>
@@ -231,6 +256,7 @@ const TeamDetails = () => {
           <Button onClick={handleInviteModalClose} color="primary">
             Cancel
           </Button>
+
           <Button onClick={handleInviteSubmit} color="primary">
             Send Invitation
           </Button>
